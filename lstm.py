@@ -11,21 +11,24 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' #Hide messy TensorFlow warnings
 warnings.filterwarnings("ignore") #Hide messy Numpy warnings
 
 def load_data(filename, seq_len, normalise_window):
-    f = open(filename, 'rb').read()
-    data = f.decode().split('\n')
+    f = open(filename, 'rb').read()  #读取二进制文件
+    data = f.decode().split('\n')    #decode二进制文件并以换行划分
+    #why二进制文件？本来文件就是二进制？data是否可能有乱码etc?
 
     sequence_length = seq_len + 1
     result = []
     for index in range(len(data) - sequence_length):
         result.append(data[index: index + sequence_length])
+    #sequence_length是什么？result是什么？eg：data:18,sequence_length:10,result(data[0:10],data[1:11],...,data[7,17])
     
     if normalise_window:
         result = normalise_windows(result)
+    #normalise_window是什么？
 
     result = np.array(result)
 
-    row = round(0.9 * result.shape[0])
-    train = result[:int(row), :]
+    row = round(0.9 * result.shape[0])  #row为result的行数*0.9，即0.9（len(data) - sequence_length），eg.row=7
+    train = result[:int(row), :]        #train为训练集，选取result前
     np.random.shuffle(train)
     x_train = train[:, :-1]
     y_train = train[:, -1]
