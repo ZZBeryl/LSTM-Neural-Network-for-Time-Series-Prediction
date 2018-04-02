@@ -28,7 +28,7 @@ def load_data(filename, seq_len, normalise_window):
     result = np.array(result)
 
     row = round(0.9 * result.shape[0])  #row为result的行数*0.9，即0.9（len(data) - sequence_length），eg.row=7
-    train = result[:int(row), :]        #train为训练集，选取result前
+    train = result[:int(row), :]        #train为训练集，选取result前row行
     np.random.shuffle(train)
     x_train = train[:, :-1]
     y_train = train[:, -1]
