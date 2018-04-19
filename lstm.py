@@ -30,12 +30,12 @@ def load_data(filename, seq_len, normalise_window):
     row = round(0.9 * result.shape[0])  #row为result的行数*0.9，即0.9（len(data) - sequence_length），eg.row=7
     train = result[:int(row), :]        #train为训练集，选取result前row行
     np.random.shuffle(train)
-    x_train = train[:, :-1]
-    y_train = train[:, -1]
-    x_test = result[int(row):, :-1]
-    y_test = result[int(row):, -1]
+    x_train = train[:, :-1]             #x取为前(sequence_length-1)项，eg：result(data[0:9],data[1:10],...,data[6,15])
+    y_train = train[:, -1]              #y取为最后一项，eg：result(data[10],data[11],...,data[16])
+    x_test = result[int(row):, :-1]     #eg：result(data[7,16])
+    y_test = result[int(row):, -1]      #eg：result(data[17])
 
-    x_train = np.reshape(x_train, (x_train.shape[0], x_train.shape[1], 1))
+    x_train = np.reshape(x_train, (x_train.shape[0], x_train.shape[1], 1))  #把列表拆成单个数，eg：[[0][1]..[8]]
     x_test = np.reshape(x_test, (x_test.shape[0], x_test.shape[1], 1))  
 
     return [x_train, y_train, x_test, y_test]
